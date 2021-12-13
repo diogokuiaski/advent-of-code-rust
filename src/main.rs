@@ -1,37 +1,23 @@
-use std::path::Path;
-
-use advent_of_code_rust::d01_sonar_deep::SonarDeep;
-use advent_of_code_rust::d02_dive::Dive;
+use advent_of_code_rust::{
+    journey::{run_binary_diagnostic, run_dive, run_sonar_deep},
+    utils::Puzzle,
+};
 
 fn main() {
-    println!("Day 1 of Advent :: Sonar Deep");
-    let input_path = Path::new("./inputs/d01_input.txt");
-    let a = SonarDeep::from_file(input_path).unwrap();
+    let track_list = vec![
+        Puzzle::run("sonar_deep", Box::new(&run_sonar_deep)),
+        Puzzle::run("dive", Box::new(&run_dive)),
+        Puzzle::run("binary_diagnostic", Box::new(&run_binary_diagnostic)),
+    ];
 
-    println!("Sonar Deep increases = {}", a.measurements());
-    println!(
-        "Sonar Deep increases on 3 window = {}",
-        a.measurements_window_sum(3)
-    );
+    println!("");
 
-    println!("Day 2 of Advent :: Dive");
-    let input_path = Path::new("./inputs/d02_input.txt");
-    let a = Dive::from_file(input_path).unwrap();
-
-    let dive_forward = a.forward();
-    let dive_depth = a.wrong_depth();
-    println!(
-        "Dive Path Part 1 :: forward = {}, depth = {}, total = {}",
-        dive_forward,
-        dive_depth,
-        dive_forward * dive_depth
-    );
-
-    let dive_depth = a.depth();
-    println!(
-        "Dive Path Part 2 :: forward = {}, depth = {}, total = {}",
-        dive_forward,
-        dive_depth,
-        dive_forward * dive_depth
-    );
+    track_list.iter().enumerate().for_each(|(i, puzzle)| {
+        println!(
+            "Puzzle {0} [{1:^30}] elapsed {2:>6} us",
+            i,
+            puzzle.name(),
+            puzzle.elapsed_time().as_micros()
+        )
+    })
 }
