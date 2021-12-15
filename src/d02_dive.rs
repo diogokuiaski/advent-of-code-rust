@@ -1,10 +1,23 @@
 use std::{error::Error, fmt, fs, path::Path, str::FromStr};
 
+use crate::d00_aoc::InputReader;
+
 #[derive(PartialEq, Eq)]
 enum Command {
     Forward = 0,
     Down,
     Up,
+}
+
+impl From<&str> for Command {
+    fn from(input_str: &str) -> Self {
+        match input_str {
+            "forward" => Command::Forward,
+            "down" => Command::Down,
+            "up" => Command::Up,
+            _ => panic!("Error"),
+        }
+    }
 }
 
 impl fmt::Debug for Command {
@@ -27,39 +40,35 @@ pub struct Dive {
     commands: Vec<DiveCommand>,
 }
 
-impl Dive {
-    fn string_to_command(input_str: &str) -> Command {
-        match input_str {
-            "forward" => Command::Forward,
-            "down" => Command::Down,
-            "up" => Command::Up,
-            _ => panic!("Error"),
-        }
-    }
-
+impl InputReader<DiveCommand> for Dive {
     fn string_to_vector(input_str: String) -> Vec<DiveCommand> {
         let mut input_vec: Vec<DiveCommand> = vec![];
         for line in input_str.split("\n") {
             let e = line.split(" ").collect::<Vec<&str>>();
             input_vec.push(DiveCommand {
-                command: Self::string_to_command(e[0]),
+                command: Command::from(e[0]),
                 value: FromStr::from_str(e[1]).unwrap(),
             });
         }
         input_vec
     }
 
-    pub fn new(commands: Vec<DiveCommand>) -> Dive {
-        Dive { commands }
-    }
-
-    pub fn from_file(input_path: &Path) -> Result<Dive, Box<dyn Error>> {
-        let input_str = match fs::read_to_string(input_path) {
+    fn from_file(input_filepath: &Path) -> Result<Self, Box<dyn Error>>
+    where
+        Self: Sized,
+    {
+        let input_str = match fs::read_to_string(input_filepath) {
             Ok(e) => e,
             Err(err) => return Err(Box::new(err)),
         };
         let commands = Self::string_to_vector(input_str);
         Ok(Dive { commands })
+    }
+}
+
+impl Dive {
+    pub fn new(commands: Vec<DiveCommand>) -> Dive {
+        Dive { commands }
     }
 
     pub fn forward(&self) -> i32 {
@@ -100,7 +109,10 @@ impl Dive {
 
 #[cfg(test)]
 mod tests {
-    use crate::d02_dive::{Command, Dive, DiveCommand};
+    use crate::{
+        d00_aoc::InputReader,
+        d02_dive::{Command, Dive, DiveCommand},
+    };
 
     fn get_commands() -> Vec<DiveCommand> {
         // forward 5

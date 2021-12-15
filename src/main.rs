@@ -1,5 +1,5 @@
 use advent_of_code_rust::{
-    journey::{run_binary_diagnostic, run_dive, run_sonar_deep},
+    journey::{run_binary_diagnostic, run_dive, run_giant_squid, run_sonar_deep},
     utils::Puzzle,
 };
 
@@ -8,6 +8,7 @@ fn main() {
         Puzzle::run("sonar_deep", Box::new(&run_sonar_deep)),
         Puzzle::run("dive", Box::new(&run_dive)),
         Puzzle::run("binary_diagnostic", Box::new(&run_binary_diagnostic)),
+        Puzzle::run("giant_squid", Box::new(&run_giant_squid)),
     ];
 
     println!("");

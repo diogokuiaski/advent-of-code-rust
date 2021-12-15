@@ -1,10 +1,12 @@
 use std::{error::Error, fs, path::Path, str::FromStr};
 
+use crate::d00_aoc::InputReader;
+
 pub struct SonarDeep {
     input: Vec<i32>,
 }
 
-impl SonarDeep {
+impl InputReader<i32> for SonarDeep {
     fn string_to_vector(input_str: String) -> Vec<i32> {
         let mut input_vec: Vec<i32> = vec![];
         for line in input_str.split("\n") {
@@ -14,17 +16,22 @@ impl SonarDeep {
         input_vec
     }
 
-    pub fn new(input: Vec<i32>) -> SonarDeep {
-        SonarDeep { input }
-    }
-
-    pub fn from_file(input_filepath: &Path) -> Result<SonarDeep, Box<dyn Error>> {
+    fn from_file(input_filepath: &Path) -> Result<Self, Box<dyn Error>>
+    where
+        Self: Sized,
+    {
         let input_str = match fs::read_to_string(input_filepath) {
             Ok(e) => e,
             Err(err) => return Err(Box::new(err)),
         };
         let input = SonarDeep::string_to_vector(input_str);
         Ok(SonarDeep { input })
+    }
+}
+
+impl SonarDeep {
+    pub fn new(input: Vec<i32>) -> SonarDeep {
+        SonarDeep { input }
     }
 
     pub fn measurements(&self) -> i32 {
@@ -58,7 +65,7 @@ impl SonarDeep {
 
 #[cfg(test)]
 mod tests {
-    use crate::d01_sonar_deep::SonarDeep;
+    use crate::{d00_aoc::InputReader, d01_sonar_deep::SonarDeep};
 
     #[test]
     fn test_sonar_deep() {

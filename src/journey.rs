@@ -1,6 +1,9 @@
 use std::path::Path;
 
-use crate::{d01_sonar_deep::SonarDeep, d02_dive::Dive, d03_binary_diagnostic::BinaryDiagnostic};
+use crate::{
+    d00_aoc::InputReader, d01_sonar_deep::SonarDeep, d02_dive::Dive,
+    d03_binary_diagnostic::BinaryDiagnostic, d04_giant_squid::GiantSquid,
+};
 
 pub fn run_sonar_deep() {
     println!("Day 1 of Advent :: Sonar Deep");
@@ -50,4 +53,12 @@ pub fn run_binary_diagnostic() {
         a.co2(),
         a.oxygen() * a.co2()
     );
+}
+
+pub fn run_giant_squid() {
+    println!("Day 4 of Advent :: Giant Squid");
+    let input_path = Path::new("./inputs/d04_input.txt");
+    let mut a = GiantSquid::from_file(input_path).unwrap();
+    println!("  Bingo Part 1 :: winner code {}", a.find_first_winner_code());
+    println!("  Bingo Part 2 :: winner code {}", a.find_last_winner_code());
 }
