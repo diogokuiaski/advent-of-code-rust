@@ -14,7 +14,7 @@ type TakenMap = HashMap<i32, Place>;
 pub struct GiantSquid {
     numbers: Vec<i32>,
     boards: Vec<(Board, TakenMap)>,
-    winners: Vec<(usize,i32)>,
+    winners: Vec<(usize, i32)>,
 }
 
 impl InputReader<Board> for GiantSquid {
@@ -75,7 +75,11 @@ impl GiantSquid {
                 (a.clone(), map)
             })
             .collect();
-        GiantSquid { numbers, boards: b, winners: vec!() }
+        GiantSquid {
+            numbers,
+            boards: b,
+            winners: vec![],
+        }
     }
 
     pub fn find_first_winner_code(&mut self) -> i32 {
@@ -84,11 +88,9 @@ impl GiantSquid {
         }
         for i in 0..5 {
             let n = self.numbers[i];
-            self.boards.iter_mut().for_each(|f| {
-                match f.1.get_mut(&n) {
-                    Some(e) => e.taken = true,
-                    None => return,
-                }
+            self.boards.iter_mut().for_each(|f| match f.1.get_mut(&n) {
+                Some(e) => e.taken = true,
+                None => return,
             });
         }
 
@@ -97,11 +99,9 @@ impl GiantSquid {
         let mut board_winner = 0;
         while i < self.numbers.len() {
             n = self.numbers[i];
-            self.boards.iter_mut().for_each(|f| {
-                match f.1.get_mut(&n) {
-                    Some(e) => e.taken = true,
-                    None => return,
-                }
+            self.boards.iter_mut().for_each(|f| match f.1.get_mut(&n) {
+                Some(e) => e.taken = true,
+                None => return,
             });
             i += 1;
             let winner = self.check_winner(n);
@@ -120,11 +120,9 @@ impl GiantSquid {
         }
         for i in 0..5 {
             let n = self.numbers[i];
-            self.boards.iter_mut().for_each(|f| {
-                match f.1.get_mut(&n) {
-                    Some(e) => e.taken = true,
-                    None => return,
-                }
+            self.boards.iter_mut().for_each(|f| match f.1.get_mut(&n) {
+                Some(e) => e.taken = true,
+                None => return,
             });
         }
 
@@ -132,11 +130,9 @@ impl GiantSquid {
         let mut n = 0;
         while i < self.numbers.len() {
             n = self.numbers[i];
-            self.boards.iter_mut().for_each(|f| {
-                match f.1.get_mut(&n) {
-                    Some(e) => e.taken = true,
-                    None => return,
-                }
+            self.boards.iter_mut().for_each(|f| match f.1.get_mut(&n) {
+                Some(e) => e.taken = true,
+                None => return,
             });
             i += 1;
             let winner = self.check_winner(n);
@@ -145,7 +141,7 @@ impl GiantSquid {
             };
             winner.unwrap().iter_mut().for_each(|a| {
                 let i = *a;
-                self.winners.push((i,self.get_not_taken(i)));
+                self.winners.push((i, self.get_not_taken(i)));
             });
             if self.winners.len() == self.boards.len() {
                 break;
@@ -155,7 +151,7 @@ impl GiantSquid {
     }
 
     fn check_winner(&self, n: i32) -> Option<Vec<usize>> {
-        let mut result = vec!();
+        let mut result = vec![];
 
         self.boards.iter().enumerate().for_each(|(i, f)| {
             if self.winners.iter().find(|a| a.0 == i).is_some() {
@@ -188,9 +184,9 @@ impl GiantSquid {
 
     fn get_not_taken(&self, board_winner: usize) -> i32 {
         let (_, m) = &self.boards[board_winner];
-        m.iter().filter(|p| !p.1.taken).fold(0, |acc, x| {
-            acc + x.1.value
-        })
+        m.iter()
+            .filter(|p| !p.1.taken)
+            .fold(0, |acc, x| acc + x.1.value)
     }
 }
 

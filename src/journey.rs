@@ -3,6 +3,7 @@ use std::path::Path;
 use crate::{
     d00_aoc::InputReader, d01_sonar_deep::SonarDeep, d02_dive::Dive,
     d03_binary_diagnostic::BinaryDiagnostic, d04_giant_squid::GiantSquid,
+    d05_hydrothermal_veture::HydroThermalVenture,
 };
 
 pub fn run_sonar_deep() {
@@ -59,6 +60,20 @@ pub fn run_giant_squid() {
     println!("Day 4 of Advent :: Giant Squid");
     let input_path = Path::new("./inputs/d04_input.txt");
     let mut a = GiantSquid::from_file(input_path).unwrap();
-    println!("  Bingo Part 1 :: winner code {}", a.find_first_winner_code());
-    println!("  Bingo Part 2 :: winner code {}", a.find_last_winner_code());
+    println!(
+        "  Bingo Part 1 :: winner code {}",
+        a.find_first_winner_code()
+    );
+    println!(
+        "  Bingo Part 2 :: winner code {}",
+        a.find_last_winner_code()
+    );
+}
+
+pub fn run_hydrothermal_venture() {
+    println!("Day 5 of Advent :: Hydrothermal Venture");
+    let input_path = Path::new("./inputs/d05_input.txt");
+    let a = HydroThermalVenture::from_file(input_path).unwrap();
+    println!("  Vents Part 1 :: overlaps {}", a.overlaps());
+    println!("  Vents Part 2 :: overlaps diagonal {}", a.overlaps_diag());
 }
